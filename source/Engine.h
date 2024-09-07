@@ -3,8 +3,8 @@
 #include "IndexBuffer.h"
 #include <memory>
 #include "Shader.h"
-#include "glew.h"
-#include "glfw3.h"
+#include "include.h"
+
 
 #include "Texture.h"
 #include "glm.hpp"

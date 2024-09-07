@@ -1,5 +1,4 @@
-#include <glew.h>
-#include <glfw3.h>
+
 #include "Shader.h"
 #include "Texture.h"
 #include "Object.h"
@@ -109,7 +108,7 @@ int main(void)
    
   
     shader.bind();
-    Texture texture("C:/Users/user/Downloads/killua.png");
+    Texture texture("resources/killua.png");
     texture.bind(0);
     
     shader.setUniform4f("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
@@ -177,7 +176,7 @@ int main(void)
         camera.UpdateCameraMatrix(glm::vec2(0.0f,0.0f), 1.0f);
         
 
-        drawRectangle(shader, { 0.0f,0.0f,1.0f }, { 300,300 }, { 800,800 },1.0f);
+        drawRectangle(shader, { 0.0f,0.0f,1.0f }, { 1000,300 }, { 800,800 },1.0f);
 
         
         

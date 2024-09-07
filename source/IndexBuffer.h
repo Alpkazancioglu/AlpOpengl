@@ -1,6 +1,5 @@
 #pragma once
-#include "glew.h"
-#include "glfw3.h"
+#include "include.h"
 
 
 class IndexBuffer

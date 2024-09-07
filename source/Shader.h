@@ -1,7 +1,6 @@
 #pragma once
-#include "glew.h"
-#include "glfw3.h"
 
+#include "include.h"
 #include <iostream>
 #include <string>
 #include "sstream"

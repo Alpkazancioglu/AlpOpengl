@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
-#include "glew.h"
-#include "glfw3.h"
+#include "include.h"
 
 
 class VertexBufferLayout
