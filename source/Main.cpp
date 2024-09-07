@@ -58,6 +58,9 @@ void GLAPIENTRY debugCallback(GLenum source, GLenum type, GLuint id, GLenum seve
 
 
 
+// Set the callback when initializing the window
+
+
 
 int main(void)
 {
@@ -77,7 +80,6 @@ int main(void)
 
    
     glfwMakeContextCurrent(window);
-
 
 
 
@@ -161,28 +163,59 @@ int main(void)
         /* Render here */
         
        
-        //glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-       // glViewport(0, 0, getWindowSize().x, getWindowSize().y);
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+        
+        
+        glViewport(0, 0, videoMode->width, videoMode->height);
 
         updateWindowSize(window);
        
        
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f);
+        glClearColor(1.0f,1.0f,1.0f,1.0f);
 
      
 
-
         camera.UpdateCameraMatrix(glm::vec2(0.0f,0.0f), 1.0f);
+
+        drawRectangle(shader, { 0.0f,0.0f,0.0f }, { 400,400 }, { 800,800 },1.0f);
+        
+       
+
+        
+            
         
 
-        drawRectangle(shader, { 0.0f,0.0f,1.0f }, { 1000,300 }, { 800,800 },1.0f);
 
+
+
+
+
+
+
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+       
+        float currentWindowWidth = static_cast<float>(getWindowSize().x);
+        float currentWindowHeight = static_cast<float>(getWindowSize().y);
+
+        float Ratio = static_cast<float>(videoMode->width) / static_cast<float>(videoMode->height);
+        float NewWidth = currentWindowHeight * Ratio;
+        float NewHeight = currentWindowWidth / Ratio;
+
+        if (NewWidth > NewHeight)
+        {
+            float posx = (currentWindowWidth - NewWidth) / 2.0f;
+            glViewport(posx, 0.0f, NewWidth, currentWindowHeight);
+        }
+        if (NewWidth < NewHeight)
+        {
+            float posy = (currentWindowHeight - NewHeight) / 2.0f;
+            glViewport(0.0f, posy, NewHeight, currentWindowHeight);
+        }
         
-        
-        //glBindFramebuffer(GL_FRAMEBUFFER, 0);
-       /* glViewport(0, 0, getWindowSize().x, getWindowSize().y);
-        
+        std::cout << NewWidth << "::" << NewHeight << std::endl;
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f);
 
@@ -200,7 +233,7 @@ int main(void)
 
 
         
-        frameBufferShader.unBind();*/
+        frameBufferShader.unBind();
         
         glfwSwapBuffers(window);
         glfwPollEvents();

@@ -53,8 +53,8 @@ void drawRectangle(Shader& shader, glm::vec3 rgb, glm::vec2 pos,glm::vec2 size,f
 	glm::vec2 clipWidthAndHeight = castScreenToClip(size.x, size.y);
 
 	
-	transMats.TranslationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(clipPos.x, clipPos.y, 0.0f));
-	//transMats.ScalingMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(clipWidthAndHeight.x,clipWidthAndHeight.y, 1.0f));
+	transMats.TranslationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f,0.0f,0.0f));
+	transMats.ScalingMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f,1.0f, 1.0f));
 
 	
 

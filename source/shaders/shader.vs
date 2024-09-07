@@ -18,11 +18,10 @@ uniform mat4 ratioMat;
 void main(){
 	
 	v_textCoord = textCoord;
-	vec4 newPos = model * vec4(position,0.0f,1.0f);
-	newPos.x += 0.5f;
-	newPos.y -= 0.5f;
+	vec2 newpos = position;
+	
 	
 
-	gl_Position =  projection * view * vec4(newPos.xy,0.0f,1.0f);
+	gl_Position =  projection * view * model * vec4(newpos,0.0f,1.0f);
 
 }

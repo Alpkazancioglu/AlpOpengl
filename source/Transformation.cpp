@@ -53,6 +53,7 @@ void updateWindowSize(GLFWwindow* window)
 
 glm::vec2 castScreenToClip(int x, int y)
 {
-	std::cout << inverseWindowSize.x << std::endl;
-	return  (glm::vec2(x,y) * inverseWindowSize) * 2.0f - 1.0f;
+	float xClip = (x + 0.5f) / (getWindowSize().x/2) - 1.0f;
+	float yClip = 1.0f - (y + 0.5f) / (getWindowSize().y/2);
+	return  glm::vec2(xClip, yClip);
 }
