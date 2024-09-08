@@ -43,6 +43,13 @@ glm::ivec2 getWindowSize()
 	return glm::ivec2(windowSize);
 }
 
+glm::vec2 getViewPortSize()
+{
+	GLint m_viewport[4];
+	glGetIntegerv(GL_VIEWPORT, m_viewport);
+	return glm::vec2(m_viewport[2], m_viewport[3]);
+}
+
 void updateWindowSize(GLFWwindow* window)
 {
 	glfwGetWindowSize(window, &windowSize.x, &windowSize.y);
@@ -53,7 +60,12 @@ void updateWindowSize(GLFWwindow* window)
 
 glm::vec2 castScreenToClip(int x, int y)
 {
-	float xClip = (x + 0.5f) / (getWindowSize().x/2) - 1.0f;
-	float yClip = 1.0f - (y + 0.5f) / (getWindowSize().y/2);
+	glm::vec2 viewportsize = getViewPortSize();
+	
+	/*float xClip = (x + 0.5f) / (getWindowSize().x/2) - 1.0f;
+	float yClip = 1.0f - (y + 0.5f) / (getWindowSize().y/2);*/
+	float xClip = (x + 0.5f) / (viewportsize.x/2) - 1.0f;
+	float yClip = 1.0f - (y + 0.5f) / (viewportsize.y/2);
+
 	return  glm::vec2(xClip, yClip);
 }

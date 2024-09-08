@@ -11,50 +11,7 @@
 
 
 
-void GLAPIENTRY debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
 
-    const char* sourceStr;
-    switch (source) {
-    case GL_DEBUG_SOURCE_API: sourceStr = "API"; break;
-    case GL_DEBUG_SOURCE_WINDOW_SYSTEM: sourceStr = "Window System"; break;
-    case GL_DEBUG_SOURCE_SHADER_COMPILER: sourceStr = "Shader Compiler"; break;
-    case GL_DEBUG_SOURCE_THIRD_PARTY: sourceStr = "Third Party"; break;
-    case GL_DEBUG_SOURCE_APPLICATION: sourceStr = "Application"; break;
-    case GL_DEBUG_SOURCE_OTHER: sourceStr = "Other"; break;
-    default: sourceStr = "Unknown"; break;
-    }
-
-    const char* typeStr;
-    switch (type) {
-    case GL_DEBUG_TYPE_ERROR: typeStr = "Error"; break;
-    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: typeStr = "Deprecated Behavior"; break;
-    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: typeStr = "Undefined Behavior"; break;
-    case GL_DEBUG_TYPE_PORTABILITY: typeStr = "Portability"; break;
-    case GL_DEBUG_TYPE_PERFORMANCE: typeStr = "Performance"; break;
-    case GL_DEBUG_TYPE_MARKER: typeStr = "Marker"; break;
-    case GL_DEBUG_TYPE_PUSH_GROUP: typeStr = "Push Group"; break;
-    case GL_DEBUG_TYPE_POP_GROUP: typeStr = "Pop Group"; break;
-    case GL_DEBUG_TYPE_OTHER: typeStr = "Other"; break;
-    default: typeStr = "Unknown"; break;
-    }
-
-    const char* severityStr;
-    switch (severity) {
-    case GL_DEBUG_SEVERITY_HIGH: severityStr = "High"; break;
-    case GL_DEBUG_SEVERITY_MEDIUM: severityStr = "Medium"; break;
-    case GL_DEBUG_SEVERITY_LOW: severityStr = "Low"; break;
-    case GL_DEBUG_SEVERITY_NOTIFICATION: severityStr = "Notification"; break;
-    default: severityStr = "Unknown"; break;
-    }
-
-
-    fprintf(stderr, "OpenGL Debug Message:\n");
-    fprintf(stderr, "    Source: %s\n", sourceStr);
-    fprintf(stderr, "    Type: %s\n", typeStr);
-    fprintf(stderr, "    ID: %u\n", id);
-    fprintf(stderr, "    Severity: %s\n", severityStr);
-    fprintf(stderr, "    Message: %s\n", message);
-}
 
 
 
@@ -64,51 +21,11 @@ void GLAPIENTRY debugCallback(GLenum source, GLenum type, GLuint id, GLenum seve
 
 int main(void)
 {
-    GLFWwindow* window;
-
-   
-    if (!glfwInit())
-        return -1;
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-   
-    window = glfwCreateWindow(1600,900, "Hello World", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
-
-   
-    glfwMakeContextCurrent(window);
-
-
-
-    if (glewInit() != GLEW_OK)
-        return -1;
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
-    glDebugMessageCallback(debugCallback, nullptr);
-    
-    
-    
-
+    GLFWwindow* window = InitEngine();
 
     Shader shader("shaders/shader.vs","shaders/shader.fs");
-
-    
     Shader frameBufferShader("shaders/FrameBufferShader.vs", "shaders/FrameBufferShader.fs");
 
-
-
-
-    InitEngine();
-
-
-   
-   
-  
     shader.bind();
     Texture texture("resources/killua.png");
     texture.bind(0);
@@ -178,7 +95,7 @@ int main(void)
 
         camera.UpdateCameraMatrix(glm::vec2(0.0f,0.0f), 1.0f);
 
-        drawRectangle(shader, { 0.0f,0.0f,0.0f }, { 400,400 }, { 800,800 },1.0f);
+        drawRectangle(shader, { 0.0f,0.0f,0.0f }, { 0,0 }, { 1600/2,900/2 },1.0f);
         
        
 
@@ -197,25 +114,34 @@ int main(void)
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
        
-        float currentWindowWidth = static_cast<float>(getWindowSize().x);
-        float currentWindowHeight = static_cast<float>(getWindowSize().y);
+        double currentWindowWidth = static_cast<double>(getWindowSize().x);
+        double currentWindowHeight = IsMaximized ? static_cast<double>(videoMode->height) : static_cast<double>(getWindowSize().y);
 
-        float Ratio = static_cast<float>(videoMode->width) / static_cast<float>(videoMode->height);
-        float NewWidth = currentWindowHeight * Ratio;
-        float NewHeight = currentWindowWidth / Ratio;
+        double Ratio = static_cast<double>(videoMode->width) / static_cast<double>(videoMode->height);
 
-        if (NewWidth > NewHeight)
+        double NewWidth = currentWindowHeight * Ratio;
+        double NewHeight = currentWindowWidth / Ratio;
+
+        if (currentWindowWidth > currentWindowHeight)
         {
-            float posx = (currentWindowWidth - NewWidth) / 2.0f;
-            glViewport(posx, 0.0f, NewWidth, currentWindowHeight);
+            if (currentWindowWidth > NewWidth)
+            {
+                double posx = (currentWindowWidth - NewWidth) / 2.0;
+                glViewport(posx, 0.0, NewWidth, currentWindowHeight);
+            }
+            else
+            {
+                double posy = (currentWindowHeight - NewHeight) / 2.0;
+                glViewport(0.0f, posy, currentWindowWidth, NewHeight);
+            }
         }
-        if (NewWidth < NewHeight)
+        else if (currentWindowWidth < currentWindowHeight)
         {
-            float posy = (currentWindowHeight - NewHeight) / 2.0f;
-            glViewport(0.0f, posy, NewHeight, currentWindowHeight);
+            double posy = (currentWindowHeight - NewHeight) / 2.0;
+            glViewport(0.0, posy, currentWindowWidth, NewHeight);
         }
         
-        std::cout << NewWidth << "::" << NewHeight << std::endl;
+       
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(128.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f, 1.0f);
 

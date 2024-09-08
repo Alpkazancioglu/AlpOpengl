@@ -19,7 +19,8 @@ void main(){
 	
 	v_textCoord = textCoord;
 	vec2 newpos = position;
-	
+	newpos.x += 0.5f;
+	newpos.y += -0.5f;
 	
 
 	gl_Position =  projection * view * model * vec4(newpos,0.0f,1.0f);

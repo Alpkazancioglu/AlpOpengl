@@ -8,7 +8,7 @@
 glm::ivec2 getWindowSize();
 void updateWindowSize(GLFWwindow* window);
 glm::vec2 castScreenToClip(int x,int y);
-
+glm::vec2 getViewPortSize();
 
 class Tranformation
 {

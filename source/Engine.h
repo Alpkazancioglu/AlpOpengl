@@ -15,9 +15,11 @@
 #include "Transformation.h"
 #include <iostream>
 
-
-void InitEngine();
+extern bool IsMaximized;
+GLFWwindow* InitEngine();
 void drawRectangle(Shader& shader, glm::vec3 rgb, glm::vec2 pos, glm::vec2 size, float rotate);
+
+
 
 const VertexArray* getQuadVao();
 
