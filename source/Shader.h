@@ -5,9 +5,6 @@
 #include <string>
 #include "sstream"
 #include <fstream>
-#include "glm.hpp"
-#include "gtc/matrix_transform.hpp"
-#include "gtc/type_ptr.hpp"
 
 #define TEXTURECOLOR 0
 #define RGBCOLOR 1
@@ -83,6 +80,7 @@ class Shader {
 
 public:
     Shader(const char* VertexShaderFilePath, const char* FragmentShaderFilePath);
+    ~Shader() {glDeleteProgram(shaderId);};
     void clear();
     GLuint getShader();
     void bind() const;
