@@ -25,8 +25,8 @@ Character::~Character()
 
 inline void Character::move()
 {
-    if (glfwGetKey(PrimaryWindow,GLFW_KEY_D) == GLFW_PRESS)
+    if (pressedKey.key == GLFW_KEY_D && pressedKey.action == GLFW_PRESS)
     {
-        std::cout << "left" << '\n';
+        //std::cout << "hi" << '\n';
     }
 }

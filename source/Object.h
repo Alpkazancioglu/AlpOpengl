@@ -34,7 +34,7 @@ public:
 	Object();
 	~Object();
 	Data data;
-	
+	Texture* texture;
 
 
 private:

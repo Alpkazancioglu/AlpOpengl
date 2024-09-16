@@ -61,7 +61,6 @@ VertexBufferLayout layout;
 std::unique_ptr<IndexBuffer> ibRectangle;
 Tranformation transMats;
 bool IsMaximized = false;
-glm::vec2 initSize;
 
 void onMaximize(GLFWwindow* window, int maximized)
 {
@@ -70,7 +69,7 @@ void onMaximize(GLFWwindow* window, int maximized)
 
 GLFWwindow* InitEngine()
 {
-	initSize = glm::vec2(1200, 800);
+	
 	const float positions[] = {
 		   -0.5f,0.5f,        0.0f,1.0f,  // 0
 		   0.5f, 0.5f,        1.0f,1.0f,   // 1

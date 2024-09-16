@@ -67,8 +67,7 @@ FrameBuffer::~FrameBuffer()
     glDeleteFramebuffers(1,&m_frameBuffer);
     glDeleteRenderbuffers(1,&m_renderBuffer);
     glDeleteTextures(1,&m_ScreenTexture);
-    shader->clear();
-    delete(vao);
+    
 }
 
 void FrameBuffer::resizeFbo()
