@@ -9,14 +9,29 @@ class Texture
 {
 public:
 	
+	Texture();
 	Texture(const std::string& path);
 	
+	
+	
+
 	~Texture();
 
 	void bind(unsigned int slot = 0) const;
 	void unBind() const;
-	unsigned int frameNumber;
-	unsigned int currentFrame;
+	
+	Texture  operator == (Texture const& other)
+	{
+		Texture texture;
+		texture.m_id = other.m_id;
+		return texture;
+	}
+
+	static std::unique_ptr<Texture> LoadTexture(const std::string& path)
+	{
+		return std::make_unique<Texture>(path);
+	}
+
 
 private:
 

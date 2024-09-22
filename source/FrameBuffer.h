@@ -56,7 +56,7 @@ FrameBuffer::FrameBuffer()
     
 
 
-    vao = getQuadVao();
+    vao = ENGINE::getQuadVao();
     shader = std::make_unique<Shader>("shaders/FrameBufferShader.vs", "shaders/FrameBufferShader.fs");
 
 

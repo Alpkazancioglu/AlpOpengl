@@ -1,5 +1,9 @@
 #include "Engine.h"
 
+
+
+
+
 void GLAPIENTRY debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
 
 	const char* sourceStr;
@@ -45,16 +49,6 @@ void GLAPIENTRY debugCallback(GLenum source, GLenum type, GLuint id, GLenum seve
 	fprintf(stderr, "    Message: %s\n", message);
 }
 
-
-
-
-
-
-
-
-float deltaTime = 0.0f;
-s_InputHandler pressedKey;
-GLFWwindow* PrimaryWindow = nullptr;
 std::unique_ptr<VertexArray> vaoRec;
 std::unique_ptr<VertexBuffer> vboRec;
 VertexBufferLayout layout;
@@ -62,19 +56,30 @@ std::unique_ptr<IndexBuffer> ibRectangle;
 Tranformation transMats;
 bool IsMaximized = false;
 
+
 void onMaximize(GLFWwindow* window, int maximized)
 {
 	IsMaximized = maximized == GLFW_TRUE ? true : false;
 }
 
-GLFWwindow* InitEngine()
+
+
+
+
+
+
+GLFWwindow* ENGINE::GetWindow()
 {
-	
+	return window;
+}
+
+void ENGINE::InitEngine()
+{
 	const float positions[] = {
-		   -0.5f,0.5f,        0.0f,1.0f,  // 0
-		   0.5f, 0.5f,        1.0f,1.0f,   // 1
-		   -0.5f,-0.5f,       0.0f,0.0f, // 2
-		   0.5f , -0.5f,      1.0f,0.0f // 3
+				   -0.5f,0.5f,        0.0f,1.0f,  // 0
+				   0.5f, 0.5f,        1.0f,1.0f,   // 1
+				   -0.5f,-0.5f,       0.0f,0.0f, // 2
+				   0.5f , -0.5f,      1.0f,0.0f // 3
 
 	};
 	const float positions2[] = {
@@ -88,37 +93,38 @@ GLFWwindow* InitEngine()
 		0,1,2,
 		1,2,3
 	};
-	GLFWwindow* window;
+	GLFWwindow* m_window;
 
-	
+
 	if (!glfwInit())
 		std::cout << "glfw init error" << std::endl;
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 	glm::vec2 initSize(1600, 900);
-	window = glfwCreateWindow(initSize.x, initSize.y, "Hello World", NULL, NULL);
-	if (!window)
+	m_window = glfwCreateWindow(initSize.x, initSize.y, "Hello World", NULL, NULL);
+	if (!m_window)
 	{
 		glfwTerminate();
 		std::cout << "window open error" << std::endl;
 	}
 
+	
+	glfwMakeContextCurrent(m_window);
 
-	glfwMakeContextCurrent(window);
-
-
+	window = m_window;
 
 	if (glewInit() != GLEW_OK)
 		std::cout << "glew init error" << std::endl;
 
-	
-	
+
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	InputHandler::InitInputHandler(window);
-	
+
+
 	glDebugMessageCallback(debugCallback, nullptr);
 
+	
 
 	vaoRec = std::make_unique<VertexArray>();
 	vboRec = std::make_unique<VertexBuffer>(positions, sizeof(positions));
@@ -126,82 +132,78 @@ GLFWwindow* InitEngine()
 	layout.Push(2);
 	ibRectangle = std::make_unique<IndexBuffer>(rectangleIndices, sizeof(rectangleIndices));
 	glfwSetWindowMaximizeCallback(window, onMaximize);
-	
-
-	vaoRec->AddBuffer(vboRec.get(), &layout,ibRectangle.get());
-
-	return window;
-};
 
 
+	vaoRec->AddBuffer(vboRec.get(), &layout, ibRectangle.get());
+}
 
-
-void drawRectangle(Shader& shader, glm::vec3 rgb, glm::vec2 pos,glm::vec2 size,float rotate)
+void ENGINE::drawRectangle(Shader& shader, glm::vec3 rgb, glm::vec2 pos, glm::vec2 size, float rotate)
 {
-	shader.bind();
-	vaoRec->bind();
-	glm::vec2 clipPos = castScreenToClip(pos.x, pos.y);
-
-	float clipWidth = size.x / (1920.0f  / 2.0f);
-	float clipHeight = size.y / (1080.0f / 2.0f);
+		shader.bind();
+		vaoRec->bind();
+		glm::vec2 clipPos = castScreenToClip(pos.x, pos.y);
 	
-	transMats.TranslationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(clipPos.x, clipPos.y,0.0f));
-	transMats.ScalingMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(clipWidth, clipHeight, 1.0f));
-
-
-
-
-	transMats.SetModelMatrixUniform(shader.getShader(), "model");
-	shader.setUniform1i("colorFlag", RGBCOLOR);
-	shader.setUniform3f("uColor", rgb.x, rgb.y, rgb.z);
-
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-	vaoRec->unBind();
-	shader.unBind();
+		float clipWidth = size.x / (1920.0f  / 2.0f);
+		float clipHeight = size.y / (1080.0f / 2.0f);
+		
+		transMats.TranslationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(clipPos.x, clipPos.y,0.0f));
+		transMats.ScalingMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(clipWidth, clipHeight, 1.0f));
+	
+	
+	
+	
+		transMats.SetModelMatrixUniform(shader.getShader(), "model");
+		shader.setUniform1i("colorFlag", RGBCOLOR);
+		shader.setUniform3f("uColor", rgb.x, rgb.y, rgb.z);
+	
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	
+		vaoRec->unBind();
+		shader.unBind();
 
 }
-void drawRecTexture(Shader &shader, Texture& texture, glm::vec2 pos, glm::vec2 size, float rotate)
+
+void ENGINE::drawRecTexture(Shader& shader, Texture& texture, glm::vec2 pos, glm::vec2 size, float rotate)
 {
 	shader.bind();
-	vaoRec->bind();
-	texture.bind();
-	glm::vec2 clipPos = castScreenToClip(pos.x, pos.y);
-
-	float clipWidth = size.x / (1920.0f / 2.0f);
-	float clipHeight = size.y / (1080.0f / 2.0f);
+		vaoRec->bind();
+		texture.bind();
+		glm::vec2 clipPos = castScreenToClip(pos.x, pos.y);
 	
+		float clipWidth = size.x / (1920.0f / 2.0f);
+		float clipHeight = size.y / (1080.0f / 2.0f);
+		
+		
+		
+		
+		
+		transMats.TranslationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(clipPos.x, clipPos.y,1.0f));
+		transMats.ScalingMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(clipWidth, clipHeight, 1.0f));
+		
+		
 	
+		transMats.SetModelMatrixUniform(shader.getShader(), "model");
+		shader.setUniform1i("colorFlag", TEXTURECOLOR);
+		shader.setUniform1i("uTexture",0);
 	
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 	
-	
-	transMats.TranslationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(clipPos.x, clipPos.y,1.0f));
-	transMats.ScalingMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(clipWidth, clipHeight, 1.0f));
-	
-	
-
-	transMats.SetModelMatrixUniform(shader.getShader(), "model");
-	shader.setUniform1i("colorFlag", TEXTURECOLOR);
-	shader.setUniform1i("uTexture",0);
-
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-	
-	vaoRec->unBind();
-	texture.unBind();
-	shader.unBind();
+		
+		vaoRec->unBind();
+		texture.unBind();
+		shader.unBind();
 }
-float getDeltaTime()
+
+float ENGINE::getDeltaTime()
 {
-	
-	static float currentFrame = glfwGetTime();
+	float currentFrame = glfwGetTime();
 	static float lastFrame = 0;
-    float deltaTime = currentFrame - lastFrame;
-    lastFrame = currentFrame;
+	float deltaTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
 	return deltaTime;
 }
-VertexArray *getQuadVao()
-{
 
+VertexArray* ENGINE::getQuadVao()
+{
 	return vaoRec.get();
 }

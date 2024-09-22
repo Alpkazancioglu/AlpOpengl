@@ -4,29 +4,32 @@
 #include <memory>
 #include "Shader.h"
 #include "include.h"
-#include "InputHandler.h"
-
-
 #include "Texture.h"
-
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
 #include "Transformation.h"
 #include <iostream>
+#define GRAVITY 10.0f
 
-extern float deltaTime;
+
 
 extern bool IsMaximized;
-extern GLFWwindow* PrimaryWindow; 
-GLFWwindow* InitEngine();
-void drawRectangle(Shader& shader,  glm::vec3 rgb, glm::vec2 pos, glm::vec2 size, float rotate = 1.0f);
-void drawRecTexture(Shader& shader,Texture& texture,glm::vec2 pos, glm::vec2 size, float rotate = 1.0f);
-float getDeltaTime();
 
 
+namespace ENGINE {
+	inline float deltaTime = 0;
+	inline GLFWwindow* window = nullptr;
+	GLFWwindow* GetWindow();
+	extern float gravity;
+	
+	void InitEngine();
+	void drawRectangle(Shader& shader, glm::vec3 rgb, glm::vec2 pos, glm::vec2 size, float rotate = 1.0f);
+	void drawRecTexture(Shader& shader, Texture& texture, glm::vec2 pos, glm::vec2 size, float rotate = 1.0f);
+	float getDeltaTime();
+	VertexArray* getQuadVao();
+}
 
 
-VertexArray* getQuadVao();
 
 
 

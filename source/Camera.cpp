@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include "Engine.h"
+
 
 Camera2D::Camera2D(unsigned int shader)
 {
@@ -52,7 +52,7 @@ void Camera2D::SetRatioMatrixUniformLocation(GLuint shader, const char* uniform)
 void Camera2D::UpdateCameraMatrix(glm::vec2 pos,float zoom)
 {
 	
-	glm::mat4 ratioMat = glm::scale(glm::mat4(1.0f), glm::vec3(GetScreenRatio(getWindowSize()).x, GetScreenRatio(getWindowSize()).y, 1.0f));
+	//glm::mat4 ratioMat = glm::scale(glm::mat4(1.0f), glm::vec3(GetScreenRatio(getWindowSize()).x, GetScreenRatio(getWindowSize()).y, 1.0f));
 	projMat = glm::ortho((-1.0f + pos.x) / zoom, (1.0f + pos.x) / zoom, (-1.0f + pos.y) / zoom, (1.0f + pos.y) / zoom, -5.0f, 5.0f);
 	viewMat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 	

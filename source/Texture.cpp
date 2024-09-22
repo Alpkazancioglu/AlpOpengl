@@ -2,6 +2,12 @@
 #include "stb_image.h"
 
 
+Texture::Texture():
+	m_FilePath("null"), m_LocalBuffer(0), m_Width(0), m_Height(0), m_BPP(0), m_id(0)
+{
+
+}
+
 Texture::Texture(const std::string& path):
 	m_FilePath(path), m_LocalBuffer(0), m_Width(0), m_Height(0) , m_BPP(0), m_id(0)
 {
@@ -59,6 +65,7 @@ Texture::Texture(const std::string& path):
 		
 	}
 }
+
 
 Texture::~Texture()
 {

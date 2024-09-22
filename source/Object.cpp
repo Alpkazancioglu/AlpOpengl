@@ -4,6 +4,8 @@
 Object::Object()
 {
 	
+	data = {};
+
 }
 
 Object::~Object()

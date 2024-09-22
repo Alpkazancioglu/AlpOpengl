@@ -34,7 +34,7 @@ public:
 	Object();
 	~Object();
 	Data data;
-	Texture* texture;
+	std::unique_ptr<Texture> texture;
 
 
 private:
