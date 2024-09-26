@@ -1,7 +1,7 @@
 #pragma once
 
 #include "include.h"
-
+#include <memory>
 #include <string>
 #include <iostream>
 

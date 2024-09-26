@@ -34,7 +34,8 @@ inline void Character::move()
         this->data.pos.x += 10;
     if (INPUT::IsKeyDown(GLFW_KEY_A))
         this->data.pos.x -= 10;
-    if (INPUT::IsKeyPressed(GLFW_KEY_SPACE))
-        this->data.pos.y -= 20;
-    
+    if (INPUT::IsKeyDown(GLFW_KEY_S))
+        this->data.pos.y += 10;
+    if (INPUT::IsKeyDown(GLFW_KEY_W))
+        this->data.pos.y -= 10;
 }
