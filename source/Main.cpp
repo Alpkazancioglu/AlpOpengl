@@ -11,7 +11,7 @@
 #include <thread>
 #include "Collision.h"
 #include <vector>
-
+#include "Log.h"
 
 
 const double TARGET_FRAME_TIME = 1.0 / 60;
@@ -41,10 +41,14 @@ int main(void)
  
     Camera2D camera(shader.getShader());
     
-    //gon.transform.Translate(glm::vec3(2.0f, 2.0f, 0.0f));
+   
 
     Character killua;
     Object ground;
+    Object box;
+
+    box.data.pos = { 500,400 };
+    box.data.size = { 200,200 };
 
     ground.data.pos = {0,880};
     ground.data.size = {1920,200};
@@ -57,6 +61,11 @@ int main(void)
   
     
     std::vector<Data> objectDatas;
+    
+    objectDatas.push_back(ground.data);
+    objectDatas.push_back(box.data);
+    
+
 
     FrameBuffer frameBuffer;
 
@@ -64,7 +73,7 @@ int main(void)
     INPUT::InitInputHandler();
     
 
-    objectDatas.push_back(killua.data);
+    
     objectDatas.push_back(ground.data);
     
     
@@ -91,15 +100,25 @@ int main(void)
         
         ENGINE::drawRecTexture(shader,*killua.texture,killua.data.pos,killua.data.size);
         ENGINE::drawRectangle(shader,{0.0f,0.5f,0.0f},ground.data.pos,ground.data.size);
+        ENGINE::drawRectangle(shader, { 0.0f,0.0f,1.0f }, box.data.pos, box.data.size);
        
-       
-
-        if (IsCollidingRecToRec(killua.data,ground.data))
-            std::cout << "collision" << killua.data.pos.y  << "::" << ground.data.pos.y<< '\n';
-        else
-            std::cout << " no collision" << '\n';
 
 
+        
+        for (size_t i = 0; i < objectDatas.size(); i++)
+        {
+            if (IsCollidingRecToRec(objectDatas[i], killua.data))
+            {
+                LOG("colliding");
+                killua.isColliding = true;
+                break;
+            }
+            else {
+                killua.isColliding = false;
+            }
+
+            
+        }
 
 
 
