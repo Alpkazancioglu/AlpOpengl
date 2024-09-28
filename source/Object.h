@@ -22,6 +22,8 @@ struct Data
 {
 	glm::ivec2 pos;
 	glm::ivec2 size;
+	std::string name;
+	bool isColliding;
 
 };
 

@@ -18,16 +18,6 @@ const double TARGET_FRAME_TIME = 1.0 / 60;
 
 
 
-
-
-
-
-
-
-
-
-
-
 int main(void)
 {
 
@@ -49,13 +39,15 @@ int main(void)
 
     box.data.pos = { 500,400 };
     box.data.size = { 200,200 };
+    box.data.name = "box";
 
     ground.data.pos = {0,880};
     ground.data.size = {1920,200};
-    
+    ground.data.name = "ground";
+
     killua.data.pos = { 0, 0 };
     killua.data.size = { 180,180 };
-   
+    killua.data.name = "killua";
 
     killua.texture = Texture::LoadTexture("resources/knight.png");
   
@@ -103,23 +95,12 @@ int main(void)
         ENGINE::drawRectangle(shader, { 0.0f,0.0f,1.0f }, box.data.pos, box.data.size);
        
 
-
         
-        for (size_t i = 0; i < objectDatas.size(); i++)
-        {
-            if (IsCollidingRecToRec(objectDatas[i], killua.data))
-            {
-                LOG("colliding");
-                killua.isColliding = true;
-                break;
-            }
-            else {
-                killua.isColliding = false;
-            }
-
-            
-        }
-
+        
+        IsCollidingWithObjectsArray(killua.data,objectDatas);
+        
+        
+        
 
 
 

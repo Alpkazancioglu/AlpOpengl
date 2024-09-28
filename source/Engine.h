@@ -9,6 +9,7 @@
 #include "VertexBufferLayout.h"
 #include "Transformation.h"
 #include <iostream>
+#include "Log.h"
 #define GRAVITY 10.0f
 
 

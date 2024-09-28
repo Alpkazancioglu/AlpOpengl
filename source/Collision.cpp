@@ -11,3 +11,27 @@ bool IsCollidingRecToRec(Data &obj1, Data &obj2)
     return collisionX && collisionY;
     
 }
+
+std::vector<Data> IsCollidingWithObjectsArray(Data& obj,std::vector<Data>& objects)
+{
+    std::vector<Data> collidingObjects;
+    for (size_t i = 0; i < objects.size(); i++)
+    {
+        if (obj.name != objects[i].name)
+        {
+            collidingObjects.push_back(objects[i]);
+            if (IsCollidingRecToRec(obj,objects[i]))
+            {
+                LOG(objects[i].name);
+                
+            }
+            
+                
+        }
+    }
+
+    if (collidingObjects)
+    return collidingObjects;
+    
+}
+

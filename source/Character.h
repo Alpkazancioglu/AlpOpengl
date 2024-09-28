@@ -10,7 +10,9 @@ class Character : public Object
 private:
     /* data */
 public:
-    bool isColliding;
+    
+    
+
     Character(/* args */);
     ~Character();
     void move();
@@ -28,7 +30,7 @@ inline void Character::move()
 {
    
     
-    if (!isColliding)
+    if (!data.isColliding)
         this->data.pos.y += 10;
 
 
